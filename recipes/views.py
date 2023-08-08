@@ -1,11 +1,13 @@
+import os
+
 from django.http.response import Http404
 from django.shortcuts import get_list_or_404, get_object_or_404, render
 from django.db.models import Q
+# from django.contrib import messages
 
 from utils.pagination import make_pagination
 from .models import Recipe
 
-import os
 
 PER_PAGE = int(os.environ.get('PER_PAGE', 6))
 
