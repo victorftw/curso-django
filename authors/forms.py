@@ -49,14 +49,16 @@ class RegisterForm(forms.ModelForm):
             'one lowercase letter and one number. The length should be '
             'at least 8 characters.'
         ),
-        validators=[strong_password]
+        validators=[strong_password],
+        label='Password'
     )
 
     confirm_password = forms.CharField(
         required=True,
         widget=forms.PasswordInput(attrs={
             'placeholder': 'Repeat your password'
-        })
+        }),
+        label='Confirm password'
     )
 
     class Meta:
