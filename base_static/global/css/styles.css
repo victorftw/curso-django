@@ -339,7 +339,9 @@ a {
     color: var(--color-error-dark);
 }
 
-.form-content input, textarea, select {
+.form-content input,
+textarea,
+select {
     width: 100%;
     padding: 1rem;
     border-radius: 0.4rem;
@@ -440,7 +442,9 @@ a {
     margin: 0 auto;
 }
 
-.authors-dashboard-container h3, p, ul {
+.authors-dashboard-container h3,
+p,
+ul {
     list-style-type: none;
     margin: 1rem 0;
 }
@@ -464,6 +468,7 @@ a {
 }
 
 @media (max-width: 600px) {
+
     .main-content-list,
     .form-content-grid {
         grid-template-columns: repeat(auto-fit, minmax(100%, 1fr));
