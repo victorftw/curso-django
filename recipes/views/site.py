@@ -11,7 +11,7 @@ from django.utils import translation
 from django.utils.translation import gettext as _
 
 from utils.pagination import make_pagination
-from .models import Recipe
+from ..models import Recipe
 from tag.models import Tag
 
 
