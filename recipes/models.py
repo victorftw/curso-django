@@ -69,7 +69,7 @@ class Recipe(models.Model):
 
     @staticmethod
     def resize_image(image, new_width=800):
-        image_full_path = os.path.join(settings.MEDIA_ROOT)
+        image_full_path = os.path.join(settings.MEDIA_ROOT, image.name)
         image_pillow = Image.open(image_full_path)
         original_width, original_height = image_pillow.size
 
