@@ -22,12 +22,12 @@ urlpatterns = [
          views.theory, name="theory"),
     path(
         'recipes/api/v2/',
-        views.recipes_api_list,
+        views.RecipeAPIv2List.as_view(),
         name='recipes_api_v2',
     ),
     path(
         'recipes/api/v2/<int:pk>/',
-        views.recipes_api_detail,
+        views.RecipeAPIv2Detail.as_view(),
         name='recipes_api_v2_detail',
     ),
     path(
