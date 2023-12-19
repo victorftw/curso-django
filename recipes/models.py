@@ -100,7 +100,7 @@ class Recipe(models.Model):
                     k=5,
                 )
             )
-        self.slug = slugify(f'{self.title}-{rand_letters}')
+            self.slug = slugify(f'{self.title}-{rand_letters}')
 
         saved = super().save(*args, **kwargs)
 
