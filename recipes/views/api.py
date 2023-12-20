@@ -1,11 +1,13 @@
+from django.shortcuts import get_object_or_404
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from rest_framework.viewsets import ModelViewSet
 from rest_framework.pagination import PageNumberPagination
-from django.shortcuts import get_object_or_404
+from rest_framework.permissions import IsAuthenticatedOrReadOnly
 
 from ..models import Recipe
 from ..serializers import RecipeSerializer
+from ..permissions import IsOwner
 from tag.models import Tag
 from tag.serializers import TagSerializer
 
@@ -18,6 +20,7 @@ class RecipeAPIv2ViewSet(ModelViewSet):
     queryset = Recipe.objects.get_published()
     serializer_class = RecipeSerializer
     pagination_class = RecipeAPIv2Pagination
+    permission_classes = [IsAuthenticatedOrReadOnly, ]
 
     def get_queryset(self):
         qs = super().get_queryset()
@@ -29,21 +32,30 @@ class RecipeAPIv2ViewSet(ModelViewSet):
 
         return qs
 
-    def get_serializer_class(self):
-        return super().get_serializer_class()
+    def get_object(self):
+        pk = self.kwargs.get('pk', '')
 
-    def get_serializer(self, *args, **kwargs):
-        return super().get_serializer(*args, **kwargs)
+        obj = get_object_or_404(
+            self.get_queryset(),
+            pk=pk
+        )
 
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
-        context["example"] = 'This is in context now'
-        return context
+        self.check_object_permissions(self.request, obj)
+
+        return obj
+
+    def get_permissions(self):
+        if self.request.method not in ['PATCH', 'DELETE']:
+            return [IsOwner(), ]
+        return super().get_permissions()
+
+    def list(self, request, *args, **kwargs):
+        print('REQUEST', request.user, self.request.user)
+        print(request.user.is_authenticated)
+        return super().list(request, *args, **kwargs)
 
     def partial_update(self, request, *args, **kwargs):
-        pk = kwargs.get('pk')
-
-        recipe = self.get_queryset().filter(pk=pk).first()
+        recipe = self.get_object()
         serializer = RecipeSerializer(
             instance=recipe,
             data=request.data,
@@ -56,6 +68,17 @@ class RecipeAPIv2ViewSet(ModelViewSet):
         return Response(
             serializer.data,
         )
+
+    def get_serializer_class(self):
+        return super().get_serializer_class()
+
+    def get_serializer(self, *args, **kwargs):
+        return super().get_serializer(*args, **kwargs)
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context["example"] = 'This is in context now'
+        return context
 
 
 @api_view()
